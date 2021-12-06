@@ -49,4 +49,4 @@
 - [JPA Contents](https://github.com/BAEKJungHo/JPA)
 - [JPA Best Practice](https://github.com/cheese10yun/spring-jpa-best-practices)
 - [Spring Guide](https://github.com/cheese10yun/spring-guide)
-- [JPA ORM 표준 JPA Programming 요약 자료](https://ultrakain.gitbooks.io/jpa/content/)
+- [자바 ORM 표준 JPA Programming 요약 자료](https://ultrakain.gitbooks.io/jpa/content/)
