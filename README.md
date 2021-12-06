@@ -37,6 +37,13 @@
     - Thymeleaf
     - H2 
 
+### ✔️ [JPA issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/jpa)
+
+- [#issue1] JPA Persistence.xml
+- [#issue1-1] javax.persistence vs hibernate.xxx
+
+### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
+
 ### Referecnes
 
 - [JPA Contents](https://github.com/BAEKJungHo/JPA)
