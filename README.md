@@ -44,6 +44,10 @@
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
+- [#issue1] Given-When-Then
+- [#issue1-1] Given-When-Then Templates
+- [#issue2] @DisplayName
+
 ### Referecnes
 
 - [JPA Contents](https://github.com/BAEKJungHo/JPA)
