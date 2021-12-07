@@ -34,7 +34,6 @@ void $NAME$() throws Exception {
 
 ### [#issue2] @DisplayName
 
-- 현재 나는 `Given-When-Then Templates` 을 따르고 있다.
 - @Displayname 은 Test Results 에서 보여질 이름을 설정한다.
   - 따로 설정하지 않으면 메서드 이름으로 동작된다.
 - @Displayname 을 클래스와 메서드에 각각 설정하면 다음과 같은 계층 구조로 Test Results 에 보이게된다.
