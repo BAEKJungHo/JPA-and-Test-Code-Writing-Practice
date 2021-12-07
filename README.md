@@ -40,6 +40,7 @@
 
 - [#issue1] JPA Persistence.xml
 - [#issue1-1] javax.persistence vs hibernate.xxx
+- [#issue1-2] EntityManagerFactory 생성 과정
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
