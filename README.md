@@ -25,9 +25,8 @@
     - 파일 테이블(FILES)
 - __브랜치 구성__
     - master
-    - develop/pure
-    - develop/advanced
-    - feature
+    - feature/pure-xxx
+    - feature/advanced-xxx
 - __기술 스택__
     - GitHub
     - Java 11
