@@ -12,6 +12,19 @@
   - DB 를 생성한다고 보면 된다.
     - 연결할 DB 하나당 영속성 유닛 하나 등록
   - name 속성에는 DB 이름 작성
+- __class__
+  - `<class>entity</class>`
+  - 엔티티 인식이 안되면 다음과 같은 에러가 발생한다.
+    - `java.lang.IllegalArgumentException: Unknown entity`
+  - 빌드 환경에 따라서 클래스 인식이 자동으로 안되는 경우가 있을때 아래 구문을 사용하면 된다.
+  - ```xml
+    <persistence-unit name="purejpa">
+          <class>com.jtcwp.purejpa.domain.member.Member</class>
+          <properties>
+            // 생략
+          </properties>
+    </persistence-unit>
+    ```
 
 #### [#issue1-1] javax.persistence vs hibernate.xxx
 
