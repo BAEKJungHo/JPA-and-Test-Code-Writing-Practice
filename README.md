@@ -41,6 +41,10 @@
 - [#issue1] JPA Persistence.xml
 - [#issue1-1] javax.persistence vs hibernate.xxx
 - [#issue1-2] EntityManagerFactory 생성 과정
+- [#issue3] EntityManagerFactory, EntityManager
+- [#issue3-1] EntityTransaction
+- [#issue4] 영속성 컨텍스트(Persistence Context)
+- [#issue4-1] 플러시(flush)
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
