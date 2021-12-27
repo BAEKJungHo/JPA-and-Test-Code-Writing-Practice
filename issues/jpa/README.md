@@ -85,6 +85,7 @@
       - `javax.persistence.PersistenceException: org.hibernate.id.IdentifierGenerationException: ids for this class must be manually assigned before calling save()`
   - 영속 상태의 엔티티는 `1차 캐시`에 저장된다.
     - 즉, 영속성 컨텍스트가 내부에 Map 으로된 캐시를 가지고 있고, `KEY : @Id, VALUE : entity` 를 가지고 있다.
+- [JPA 는 1차 캐시를 통해서 Repeatable Read 를 애플리케이션 레벨에서 지원한다.](https://techvu.dev/116)
   
 #### [#issue4-1] 플러시(flush)
 
