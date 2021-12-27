@@ -1,4 +1,4 @@
-package com.jtcwp.purejpa.entitymanagerfactory;
+package com.jtcwp.purejpa.test.entitymanagerfactory;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
