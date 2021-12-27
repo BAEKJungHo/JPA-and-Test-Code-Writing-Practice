@@ -94,3 +94,20 @@
   - em.flush() : 직접 호출
   - 트랜잭션 커밋 시 플러시 자동 호출
   - JPQL 쿼리 실행 시 플러시 자동 호출
+
+### [#issue5] 필드와 컬럼 매핑
+
+- __@Column__
+  - `@Column(name = "name")` : 테이블 컬럼의 이름을 필드에 매핑
+  - `@Column(name = "name", nullable = false)` : DDL 생성 시 NOT NULL 제약조건 추가
+  - `@Column(name = "name", columnDefinition = "varchar(100) default 'empty'")` : DDL 에 그대로 내용 추가
+- __@Enumerated__
+  - `@Enumerated(EnumType.ORDINAL)` : 기본값, enum 순서를 데이터베이스에 저장 EX. 1, 2 ...
+  - `@Enumerated(EnumType.STRING)` : enum 이름을 데이터베이스에 저장. 이 방식이 더 좋다. 나중에 enum 이 추가되었을때 순서에 의한 문제가 없다.
+- __날짜 관련__
+  - 구 트렌드 : @Temporal 사용
+    - `@Temporal(TemporalType.TIMESTAMP)`
+      - TemporalType : DATE or TIME or TIMESTAMP
+  - 최신 트렌드 : LocalDate or LocalDateTime 사용
+    - 애노테이션이 없어도 하이버네이트가 타입을 보고 알아서 판단해준다.
+    - private LocalDateTime createdAt;
