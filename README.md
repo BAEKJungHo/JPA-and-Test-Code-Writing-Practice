@@ -29,6 +29,7 @@
 - [#issue3-1] EntityTransaction
 - [#issue4] 영속성 컨텍스트(Persistence Context)
 - [#issue4-1] 플러시(flush)
+- [#issue5] 필드와 컬럼 매핑
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
