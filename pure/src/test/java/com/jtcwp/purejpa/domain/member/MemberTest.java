@@ -33,7 +33,7 @@ class MemberTest {
 
         // insert
         Member member = new Member();
-        member.setUserName("Jungho");
+        member.setUsername("Jungho");
         em.persist(member);
         tx.commit();
         em.close();
@@ -44,7 +44,7 @@ class MemberTest {
         emf.close();
 
         // then
-        assertThat(findMember.getUserName()).isEqualTo("Jungho");
+        assertThat(findMember.getUsername()).isEqualTo("Jungho");
     }
 
 }

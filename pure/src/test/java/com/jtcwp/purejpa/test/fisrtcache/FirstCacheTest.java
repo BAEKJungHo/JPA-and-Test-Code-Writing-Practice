@@ -1,4 +1,4 @@
-package com.jtcwp.purejpa.test.repeatableread;
+package com.jtcwp.purejpa.test.fisrtcache;
 
 import com.jtcwp.purejpa.domain.member.Member;
 import org.junit.jupiter.api.DisplayName;
@@ -11,18 +11,16 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-@DisplayName("Repeatable Read Test")
+@DisplayName("1차 캐시 테스트")
 @SpringBootTest
-class RepeatableReadTest {
+public class FirstCacheTest {
 
     @Value("${persistence.unitname}")
     private String persistenceUnitName;
 
-    @DisplayName("1차 캐시를 통한 Repeatable Read 를 지원하는지 테스트")
+    @DisplayName("EntityManger 를 스레드간 공유하면 1차 캐시의 내용을 공유하는지 테스트")
     @Test
-    void repeatableReadByCache() throws Exception {
+    void oneEntityManagerAndTwoThreadIsSharedFirstCache() throws Exception {
         // given
         EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnitName);
         insertDummyData(emf);
@@ -31,20 +29,33 @@ class RepeatableReadTest {
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
 
-        tx.begin(); // 선행 트랜잭션 시작
-        Member findMember1 = em.find(Member.class, 1L);
-        /**
-         * findMember1 : Member 를 데이터베이스에서 조회
-         * Member 를 다시 조회하기 전에 H2 데이터 베이스에서 UPDATE 문 실행
-         * findMember2 : Member 를 데이터베이스가 아닌 1차 캐시에서 조회
+        /*
+         * 서로 다른 스레드 두개 생성 : 클라이언트의 요청이 두 개 들어왔다고 가정
+         * threadA -> threadB 순서로 한다고 가정
          */
-        Member findMember2 = em.find(Member.class, 1L);
-        tx.commit(); // 선행 트랜잭션 종료료
+        tx.begin();
+        Thread threadA = new Thread(() -> {
+            // 데이터베이스에서 조회하여 1차 캐시에 내용 저장
+            Member member = em.find(Member.class, 1L);
+        });
+
+        Thread threadB = new Thread(() -> {
+            // 여기서 1차 캐시에서 조회되는지 데이터베이스에서 조회되는지 확인
+            Member member = em.find(Member.class, 1L);
+            member.setUsername("Test");
+            em.persist(member);
+        });
+
+        // 2초 뒤에 스레드 B 시작
+        threadA.start();
+        Thread.sleep(2000);
+        threadB.start();
+
+        // 3초 뒤에 커밋하고 종료
+        Thread.sleep(3000);
+        tx.commit();
         em.close();
         emf.close();
-
-        // then
-        assertThat(findMember1.getUsername()).isEqualTo(findMember2.getUsername());
     }
 
     @DisplayName("더미 데이터 삽입")

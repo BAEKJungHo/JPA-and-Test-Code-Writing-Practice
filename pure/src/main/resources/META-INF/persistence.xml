@@ -6,17 +6,23 @@
         <class>com.jtcwp.purejpa.domain.member.Member</class>
         <properties>
             <!-- 필수 속성 -->
+
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
             <property name="javax.persistence.jdbc.user" value="sa"/>
             <property name="javax.persistence.jdbc.password" value=""/>
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/purejpa"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+<!--            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>-->
+<!--            <property name="javax.persistence.jdbc.user" value="root"/>-->
+<!--            <property name="javax.persistence.jdbc.password" value="root"/>-->
+<!--            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/jpastudy"/>-->
+<!--            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL57Dialect"/>-->
 
             <!-- 옵션 -->
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.use_sql_comments" value="true"/>
-            <property name="hibernate.hbm2ddl.auto" value="create" />
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
         </properties>
     </persistence-unit>
 </persistence>
