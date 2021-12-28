@@ -135,8 +135,8 @@
       - ```java
         Member member = new Member();
         member.setUsername("BAEK");
-        em.persist(member); // INSERT SQL 실행
-        System.out.println(member.getId()); // 내부적으로 DB 에 등록된 ID(PK) 값을 조회해서
+        em.persist(member); // INSERT SQL 실행 -> 실행과 동시에 내부적으로 DB 에 등록된 ID(PK) 값을 조회해서 member 엔티티에 바인딩
+        System.out.println(member.getId());
         tx.commit();
         ```
   - SEQUENCE : 데이터베이스 시퀀스 오브젝트 사용 : Oracle, PostgreSQL, DB2, H2 등
