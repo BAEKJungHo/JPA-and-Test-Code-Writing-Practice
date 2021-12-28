@@ -170,6 +170,14 @@
 - 권장 : `Long Type + 대체 키(인조키) + 키 생성 전략 사용`
 - [기본키 매핑 전략에 따른 INSERT QUERY 실행 시점](https://techvu.dev/118)
 
+#### [#issue6-2] allocationSize 를 통한 성능 최적화
+
+- allocationSize 가 기본이 50으로 잡혀있는 이유는 성능을 최적화 하기 위해서이다.
+- 데이터베이스에서는 시퀀스 값을 미리 50까지 증가시켜놓은다음, 메모리에서 1~50 까지 생성되어있는 값을 가져다 쓰는것이다.
+- 이렇게 하면 50번 마다 `sequence call(call next value for sequenceName)`이 일어나기 때문에 성능적 이점이 있다. 
+- 여러개의 WAS, Web Server 가 있어도 동시성 이슈가 없이 사용 가능하다.
+- [AllocationSize 를 통한 성능 최적화](https://techvu.dev/119)
+
 ### [#issue7] JPA 와 데이터베이스 연결
 
 - __Persistence.xml 사용하는 경우__
