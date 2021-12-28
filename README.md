@@ -30,6 +30,10 @@
 - [#issue4] 영속성 컨텍스트(Persistence Context)
 - [#issue4-1] 플러시(flush)
 - [#issue5] 필드와 컬럼 매핑
+- [#issue6] 기본키 매핑
+- [#issue6-1] 권장하는 기본키 전략
+- [#issue6-2] allocationSize 를 통한 성능 최적화
+- [#issue7] JPA 와 데이터베이스 연결
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
@@ -43,5 +47,6 @@
 - [JPA Best Practice](https://github.com/cheese10yun/spring-jpa-best-practices)
 - [Spring Guide](https://github.com/cheese10yun/spring-guide)
 - [자바 ORM 표준 JPA Programming 요약 자료](https://ultrakain.gitbooks.io/jpa/content/)
+- [인프런, 자바 ORM 표준 JPA 프로그래밍 - 기본편](https://www.inflearn.com/course/ORM-JPA-Basic/dashboard)
 - [Junit 5 Docs](https://junit.org/junit5/docs/current/user-guide/)
 - [Junit 5 Contents](https://github.com/BAEKJungHo/test-code-in-java/blob/main/doc/JUnit5.md)
