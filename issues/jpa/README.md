@@ -49,6 +49,7 @@
 
 - EntityManagerFactory : 하나만 생성하여 애플리케이션 전체에서 공유
 - EntityManager : 쓰레드간 공유하면 안된다. 사용하고 버려야 함
+  - [EntityManager 를 쓰레드간 공유하면 안되는 이유](https://techvu.dev/117)
 
 #### [#issue3-1] EntityTransaction
 
