@@ -174,7 +174,7 @@
 - __Persistence.xml 사용하는 경우__
   - `H2`
     - ```xml
-      <property name="javax.persistence.jdbc.driver" value=""/>
+      <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
       <property name="javax.persistence.jdbc.user" value="sa"/>
       <property name="javax.persistence.jdbc.password" value=""/>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/purejpa"/>
