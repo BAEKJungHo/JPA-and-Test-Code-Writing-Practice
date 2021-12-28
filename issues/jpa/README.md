@@ -168,6 +168,7 @@
 
 - 기본키 제약 조건 : Not null, Unique, 먼 미래에서도 제약 조건이 변하면 안된다.
 - 권장 : `Long Type + 대체 키(인조키) + 키 생성 전략 사용`
+- [기본키 매핑 전략에 따른 INSERT QUERY 실행 시점](https://techvu.dev/118)
 
 ### [#issue7] JPA 와 데이터베이스 연결
 
