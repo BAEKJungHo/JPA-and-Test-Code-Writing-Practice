@@ -113,3 +113,49 @@
   - 최신 트렌드 : LocalDate or LocalDateTime 사용
     - 애노테이션이 없어도 하이버네이트가 타입을 보고 알아서 판단해준다.
     - private LocalDateTime createdAt;
+
+### [#issue6] 기본키 매핑
+
+- __직접 할당__
+  - `@Id` 만 사용
+    - ```java
+      @Id
+      private Long id;
+      ```
+- __자동 생성__
+  - `@GeneratedValue`
+  - IDENTITY : 데이터베이스에 위임 : MySQL, PostgreSQL, SQL Server, DB2 등
+      - ```java
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
+        ```
+  - SEQUENCE : 데이터베이스 시퀀스 오브젝트 사용 : Oracle, PostgreSQL, DB2, H2 등
+    - @SequenceGenerator 필요
+    - ```java
+       @Entity
+       @SequenceGenerator(
+          name = "MEMBER_SEQ_GENERATOR",
+          sequenceName = "MEMBER_SEQ",
+          initialValue = 1, allocationSize = 1)
+       public class Member {
+          @Id
+          @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBER_SEQ_GENERATOR")
+          private Long id;
+       }
+       ```
+    - @SequenceGenerator 속성
+      - allocationSize : 시퀀스 호출 할 때 마다 증가하는 수(데이터베이스 시퀀스 값이 하나씩 증가하도록 설정되어있다면 이 값을 반드시 1로 설정해야 한다. 기본값은 `50`)
+      - name : 식별자 생성기 이름
+      - sequenceName : 데이터베이스에 등록되어 있는 시퀀스 이름
+      - initialValue : DDL 생성시에만 사용 된다. 시퀀스 DDL 생성시, 처음 시작하는 수를 의미
+      - catalog, schema : 데이터베이스 catalog, schema 이름
+  - TABLE : 키 생성용 테이블 사용(시퀀스를 흉내내는 전략), 모든 DB 에서 사용
+    - @TableGenerator 필요
+    - 장점은 모든 데이터베이스에 적용가능하다는 것이고, 단점은 성능이다.
+  - AUTO : 기본 값, 방언에 따라 자동 지정
+
+#### [#issue6-1] 권장하는 기본키 전략
+
+- 기본키 제약 조건 : Not null, Unique, 먼 미래에서도 제약 조건이 변하면 안된다.
+- 권장 : `Long Type + 대체 키(인조키) + 키 생성 전략 사용`
