@@ -130,6 +130,15 @@
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
         ```
+      - __해당 전략을 사용하면 em.persist 시점에 INSERT 쿼리를 날린후, DB 에 등록된 ID(PK) 값을 내부적으로 다시 조회해서 JPA 가 엔티티에 값을 바인딩 해준다.__
+      - __일반적으로 JPA 는 트랜잭션 커밋 시점에 INSERT SQL 을 날리는 반면, IDENTITY 전략은 em.persist 시점에 날리는 것을 알 수 있다.__
+      - ```java
+        Member member = new Member();
+        member.setUsername("BAEK");
+        em.persist(member); // INSERT SQL 실행
+        System.out.println(member.getId()); // 내부적으로 DB 에 등록된 ID(PK) 값을 조회해서
+        tx.commit();
+        ```
   - SEQUENCE : 데이터베이스 시퀀스 오브젝트 사용 : Oracle, PostgreSQL, DB2, H2 등
     - @SequenceGenerator 필요
     - ```java
@@ -159,3 +168,25 @@
 
 - 기본키 제약 조건 : Not null, Unique, 먼 미래에서도 제약 조건이 변하면 안된다.
 - 권장 : `Long Type + 대체 키(인조키) + 키 생성 전략 사용`
+
+### [#issue7] JPA 와 데이터베이스 연결
+
+- __Persistence.xml 사용하는 경우__
+  - `H2`
+    - ```xml
+      <property name="javax.persistence.jdbc.driver" value=""/>
+      <property name="javax.persistence.jdbc.user" value="sa"/>
+      <property name="javax.persistence.jdbc.password" value=""/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/purejpa"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+      ```
+  - `MySQL`
+    - ```xml
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.password" value="root"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/jpastudy"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL57Dialect"/>
+      ```
+    - driver 를 `com.mysql.jdbc.Driver` 로 설정할 경우 아래와 같은 에러를 볼 수 있다.
+    - Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
