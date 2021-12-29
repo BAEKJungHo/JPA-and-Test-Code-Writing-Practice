@@ -1,6 +1,6 @@
 package com.jtcwp.purejpa.test.repeatableread;
 
-import com.jtcwp.purejpa.domain.member.Member;
+import com.jtcwp.purejpa.domain.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
