@@ -231,3 +231,36 @@
       ```
     - driver 를 `com.mysql.jdbc.Driver` 로 설정할 경우 아래와 같은 에러를 볼 수 있다.
     - Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
+
+### [#issue9] 연관관계 매핑
+
+- 테이블은 항상 양방향 연관관계를 가진다. 하지만 객체는 사실상 양방향 연관관계를 가지지 못하고, 비지니스 규칙으로 잘 묶어서 서로 다른 단방향 연관관계를 양방향 처럼 보이게 하는 것이다.
+
+#### [issue9-1] 연관관계 주인
+
+- 연관관계의 주인이란 테이블의 외래키를 수정하고 다룰 수 있는 엔티티를 의미한다.
+- 외래키를 갖고 있는 엔티티가 연관관계의 주인이 된다.
+- Ex. Team : Member : 1 : N 관계에서는 Member 테이블에 FK 가 존재하므로, Membmer 엔티티가 연관관계의 주인이 된다.
+- 연관관계의 주인은 항상 `@ManyToOne` 쪽이 된다.
+  - ```java
+    @NoArgsConstructor
+    @Getter @Setter
+    @Entity
+    @Table(name = "member")
+    public class Member {
+
+      @Column(name = "member_id", length = 20)
+      @GeneratedValue(strategy = GenerationType.IDENTITY)
+      @Id
+      private Long id;
+
+      @JoinColumn(name = "team_id")
+      @ManyToOne
+      private Team team;
+    
+    // 생략
+    }
+    ```
+  - 다대일 관계에서 `多` 에 속하는 쪽이 FK 를 갖기 때문에 연관관계의 주인이 된다.  
+    - @ManyToOne : Many = Member, One = Team
+- 연관관계 주인을 설정할 때, 비즈니스 로직을 기준으로 연관관계의 주인을 선택하면 안되며, `외래 키의 위치`를 기준으로 정해야한다.
