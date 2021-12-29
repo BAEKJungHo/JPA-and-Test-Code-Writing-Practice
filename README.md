@@ -37,6 +37,10 @@
 - [#issue8] JPA 와 데이터베이스 연결
 - [#issue9] 연관관계 매핑
 - [#issue9-1] 연관관계 주인
+- [issue9-2] 양방향 연관관계와 mappedBy
+- [issue9-3] 연관관계 편의 메서드
+- [issue9-4] 양방향 연관관계 매핑 시 무한루프 주의
+- [issue9-5] 양방향 연관관계 실무 팁
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
