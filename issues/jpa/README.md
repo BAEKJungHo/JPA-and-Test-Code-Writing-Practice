@@ -393,10 +393,9 @@ emf.close();
       Member member = new Member();
       member.setUsername("Test");
       member.setTeam(team);
-      em.persist(member);
-
       // mappedBy 가 지정된 것은 CUD Query 에 영향을 미치지 않는다.
       team.getMembers().add(member); 
+      em.persist(member);
 
       em.flush(); // 영속성 컨텍스트의 변경 내용을 DB 에 동기화
       em.clear(); // 영속성 컨텍스트를 비워줌으로써 준영속 상태가 된다.
