@@ -400,3 +400,49 @@ emf.close();
       em.flush(); // 영속성 컨텍스트의 변경 내용을 DB 에 동기화
       em.clear(); // 영속성 컨텍스트를 비워줌으로써 준영속 상태가 된다.
       ```
+  - __mappedBy 로 지정된 필드에 값이 설정되더라도 CUD Query 에 영향이 없으니까, 연관관계 주인에만 값을 설정해주면 되는것 아닌가?__
+    - `둘다 값을 설정 해주는 것이 좋다.`
+    - ```java
+      Team team = new Team();
+      team.setName("ABC");
+      em.persist(team);
+
+      Member member = new Member();
+      member.setUsername("Test");
+      member.setTeam(team);
+      // mappedBy 가 지정된 것은 CUD Query 에 영향을 미치지 않는다.
+      team.getMembers().add(member);
+      em.persist(member);
+
+      em.flush(); // 영속성 컨텍스트의 변경 내용을 DB 에 동기화
+      em.clear(); // 영속성 컨텍스트를 비워줌으로써 준영속 상태가 된다.
+
+      // 데이터베이스에서 조회
+      // Team 조회 쿼리 생성
+      Team findTeam = em.find(Team.class, team.getId());
+      // 지연 로딩에 의해서 실제 Member 객체를 꺼내 사용하는 시점에 조회 쿼리 생성
+      List<Member> members = findTeam.getMembers(); 
+      for (Member m : members) {
+          System.out.println(m.getUsername());
+      }
+      ```
+    - ```java
+      Team team = new Team();
+      team.setName("ABC");
+      em.persist(team);
+
+      Member member = new Member();
+      member.setUsername("Test");
+      member.setTeam(team);
+      // team.getMembers().add(member);
+      em.persist(member);
+
+      // 1차 캐시에서 조회
+      Team findTeam = em.find(Team.class, team.getId());
+      // 1차 캐시에 Team 안에 members 가 없기 때문에 아무것도 찍히지 않는다.
+      List<Member> members = findTeam.getMembers(); 
+      for (Member m : members) {
+          System.out.println(m.getUsername());
+      }
+      ```
+    - 따라서, 1차 캐시에서 정상적으로 연관관계를 설정한 객체를 꺼내서 사용하기 위해서는 연관관계 주인과, 주인이 아닌곳 둘 다 객체를 넣어야한다.
