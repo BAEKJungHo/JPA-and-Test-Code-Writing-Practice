@@ -104,6 +104,66 @@
   - 트랜잭션이 시작되고 해당 트랜잭션이 commit 되는 시점 직전에만 동기화 (변경 내용을 날림) 해주면 되기 때문에, 그 사이에서 플러시 매커니즘의 동작이 가능한 것이다.
     - JPA는 기본적으로 데이터를 맞추거나 동시성에 관련된 것들은 데이터베이스 트랜잭션에 위임한다.
 
+- __플러시 사용__
+
+```java
+tx.begin();
+try {
+    Team team = new Team();
+    team.setName("ABC");
+    em.persist(team);
+
+    Member member = new Member();
+    member.setUsername("BAEK");
+    member.setTeam(team);
+    em.persist(member);
+
+    em.flush(); // 영속성 컨텍스트의 변경 내용을 DB 에 동기화
+    em.clear(); // 영속성 컨텍스트를 비워줌으로써 준영속 상태가 된다.
+
+    // 데이터베이스에서 조회
+    Member findMember = em.find(Member.class, member.getId());
+    List<Member> members = findMember.getTeam().getMembers();
+
+    for (Member m : members) {
+        System.out.println(m.getUsername());
+    }
+    tx.commit();
+} catch (Exception e) {
+    tx.rollback();
+} finally {
+    em.close();
+}
+emf.close();
+```
+
+- __플러시 미사용__
+
+```java
+tx.begin();
+try {
+    Team team = new Team();
+    team.setName("NKLCWDT");
+    em.persist(team);
+
+    Member member = new Member();
+    member.setUsername("JungHo");
+    member.setTeam(team);
+    em.persist(member);
+
+    // 1차 캐시에서 조회
+    Member findMember = em.find(Member.class, member.getId());
+    Team findTeam = findMember.getTeam();
+    System.out.println("Team : " + findTeam.getName());
+    tx.commit();
+} catch (Exception e) {
+    tx.rollback();
+} finally {
+    em.close();
+}
+emf.close();
+```
+
 ### [#issue5] 객체와 테이블 매핑
 
 - __@Table__
