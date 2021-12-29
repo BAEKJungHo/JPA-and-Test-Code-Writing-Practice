@@ -35,6 +35,8 @@
 - [#issue7-1] 권장하는 기본키 전략
 - [#issue7-2] allocationSize 를 통한 성능 최적화
 - [#issue8] JPA 와 데이터베이스 연결
+- [#issue9] 연관관계 매핑
+- [#issue9-1] 연관관계 주인
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
