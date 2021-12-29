@@ -18,7 +18,7 @@
     - JPA
     - QueryDSL
     - Thymeleaf
-    - H2 
+    - H2, MySQL 5.7 
 
 ### ✔️ [JPA issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/jpa)
 
