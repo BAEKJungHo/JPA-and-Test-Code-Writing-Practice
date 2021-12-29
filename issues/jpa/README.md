@@ -352,3 +352,52 @@ emf.close();
       @OneToMany(mappedBy = "team")
       private List<Member> members = new ArrayList<>();
       ```
+- __mappedBy 가 지정된 필드는 Create, Update, Delete 쿼리가 나가지 않는다.__
+  - __연관관계의 주인이 아닌 곳에서만 관계 설정__
+    - ```java
+      Member member = new Member();
+      member.setUsername("Test");
+      em.persist(member);
+
+      // Team 에만 member 를 설정해도 데이터베이스에서 Member 테이블에 TEAM FK 가 설정되지 않는다.
+      // mappedBy 는 읽기 전용이라. 등록, 수정, 삭제에서 아무런 영향을 끼치지 못한다.
+      Team team = new Team();
+      team.setName("ABC");
+      team.getMembers().add(member);
+      em.persist(team);
+
+      em.flush(); // 영속성 컨텍스트의 변경 내용을 DB 에 동기화
+      em.clear(); // 영속성 컨텍스트를 비워줌으로써 준영속 상태가 된다.
+      ```
+  - __연관관계의 주인인 곳에서만 관계 설정__
+    - ```java
+      Team team = new Team();
+      team.setName("ABC");
+      em.persist(team);
+
+      // MEMBER 테이블에 TEAM FK 가 설정된다.
+      Member member = new Member();
+      member.setUsername("Test");
+      member.setTeam(team);
+      em.persist(member);
+
+      em.flush(); // 영속성 컨텍스트의 변경 내용을 DB 에 동기화
+      em.clear(); // 영속성 컨텍스트를 비워줌으로써 준영속 상태가 된다.
+      ```
+  - __연관관계의 주인과 주인이 아닌 곳 둘 다 관계 설정__
+    - ```java
+      Team team = new Team();
+      team.setName("ABC");
+      em.persist(team);
+
+      Member member = new Member();
+      member.setUsername("Test");
+      member.setTeam(team);
+      em.persist(member);
+
+      // mappedBy 가 지정된 것은 CUD Query 에 영향을 미치지 않는다.
+      team.getMembers().add(member); 
+
+      em.flush(); // 영속성 컨텍스트의 변경 내용을 DB 에 동기화
+      em.clear(); // 영속성 컨텍스트를 비워줌으로써 준영속 상태가 된다.
+      ```
