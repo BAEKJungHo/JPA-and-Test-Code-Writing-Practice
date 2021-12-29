@@ -29,11 +29,12 @@
 - [#issue3-1] EntityTransaction
 - [#issue4] 영속성 컨텍스트(Persistence Context)
 - [#issue4-1] 플러시(flush)
-- [#issue5] 필드와 컬럼 매핑
-- [#issue6] 기본키 매핑
-- [#issue6-1] 권장하는 기본키 전략
-- [#issue6-2] allocationSize 를 통한 성능 최적화
-- [#issue7] JPA 와 데이터베이스 연결
+- [#issue5] 객체와 테이블 매핑
+- [#issue6] 필드와 컬럼 매핑
+- [#issue7] 기본키 매핑
+- [#issue7-1] 권장하는 기본키 전략
+- [#issue7-2] allocationSize 를 통한 성능 최적화
+- [#issue8] JPA 와 데이터베이스 연결
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
