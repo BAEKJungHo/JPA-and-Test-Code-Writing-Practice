@@ -97,7 +97,39 @@
   - 트랜잭션 커밋 시 플러시 자동 호출
   - JPQL 쿼리 실행 시 플러시 자동 호출
 
-### [#issue5] 필드와 컬럼 매핑
+### [#issue5] 객체와 테이블 매핑
+
+- __@Table__
+  - Index 생성
+    - `@Table(name = "orders", indexes = @Index(name = "idx_member_id", columnList = "member_id"))`
+    - ```java
+      @NoArgsConstructor
+      @Getter
+      @Setter
+      @Entity
+      @Table(name = "orders", indexes = @Index(name = "idx_member_id", columnList = "member_id"))
+      public class Order {
+
+          @Column(name = "order_id", length = 20)
+          @GeneratedValue(strategy = GenerationType.IDENTITY)
+          @Id
+          private Long id;
+
+          @Column(name = "member_id", length = 20)
+          private Long memberId;
+
+          @Column(name = "order_date", length = 6)
+          private LocalDateTime orderDate;
+
+          @Column(name = "status", length = 100)
+          @Enumerated(EnumType.STRING)
+          private OrderStatus status;
+      }
+      ```
+- setter 는 가급적 필요한 컬럼에 대해서만 열어두는게 좋다. 무분별하게 setter 를 사용하면 어디서든 엔티티의 값을 변경할 수 있기 때문에 유지보수성이 떨어진다.
+- [테이블과 컬럼에 대한 명세를 엔티티에 자세하게 적는것이 좋은지?](https://techvu.dev/120)
+
+### [#issue6] 필드와 컬럼 매핑
 
 - __@Column__
   - `@Column(name = "name")` : 테이블 컬럼의 이름을 필드에 매핑
@@ -114,7 +146,7 @@
     - 애노테이션이 없어도 하이버네이트가 타입을 보고 알아서 판단해준다.
     - private LocalDateTime createdAt;
 
-### [#issue6] 기본키 매핑
+### [#issue7] 기본키 매핑
 
 - __직접 할당__
   - `@Id` 만 사용
@@ -164,13 +196,13 @@
     - 장점은 모든 데이터베이스에 적용가능하다는 것이고, 단점은 성능이다.
   - AUTO : 기본 값, 방언에 따라 자동 지정
 
-#### [#issue6-1] 권장하는 기본키 전략
+#### [#issue7-1] 권장하는 기본키 전략
 
 - 기본키 제약 조건 : Not null, Unique, 먼 미래에서도 제약 조건이 변하면 안된다.
 - 권장 : `Long Type + 대체 키(인조키) + 키 생성 전략 사용`
 - [기본키 매핑 전략에 따른 INSERT QUERY 실행 시점](https://techvu.dev/118)
 
-#### [#issue6-2] allocationSize 를 통한 성능 최적화
+#### [#issue7-2] allocationSize 를 통한 성능 최적화
 
 - allocationSize 가 기본이 50으로 잡혀있는 이유는 성능을 최적화 하기 위해서이다.
 - 데이터베이스에서는 시퀀스 값을 미리 50까지 증가시켜놓은다음, 메모리에서 1~50 까지 생성되어있는 값을 가져다 쓰는것이다.
@@ -178,7 +210,7 @@
 - 여러개의 WAS, Web Server 가 있어도 동시성 이슈가 없이 사용 가능하다.
 - [AllocationSize 를 통한 성능 최적화](https://techvu.dev/119)
 
-### [#issue7] JPA 와 데이터베이스 연결
+### [#issue8] JPA 와 데이터베이스 연결
 
 - __Persistence.xml 사용하는 경우__
   - `H2`
