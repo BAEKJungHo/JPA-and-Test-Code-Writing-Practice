@@ -445,4 +445,71 @@ emf.close();
           System.out.println(m.getUsername());
       }
       ```
-    - 따라서, 1차 캐시에서 정상적으로 연관관계를 설정한 객체를 꺼내서 사용하기 위해서는 연관관계 주인과, 주인이 아닌곳 둘 다 객체를 넣어야한다.
+    - 따라서, 1차 캐시에서 정상적으로 연관관계를 설정한 객체를 꺼내서 사용하기 위해서는 연관관계 주인과, 주인이 아닌곳 둘 다 객체를 넣어야 한다.
+
+#### [issue9-2] 연관관계 편의 메서드
+
+양방향 연관관계를 설정하기 위해 아래와 같이 코딩하게 되면, 깜빡하고 설정을 안할 수 도 있다.
+
+```java
+Member member = new Member();
+member.setUsername("Test");
+member.setTeam(team);
+// 이렇게 매번 설정해주는 것은 번거롭고 깜빡하기 쉽다.
+team.getMembers().add(member);
+em.persist(member);
+```
+
+따라서, `연관관계 편의 메서드` 를 작성하면 편리하게 양방향 연관관계 설정을 할 수 있다.
+
+- __방식 1__
+
+```java
+@Entity
+public class Member {
+  // 생략
+  
+  @ManyToOne
+  @JoinColumn(name = "TEAM_ID")
+  private Team team;
+  
+  // 연관관계 편의 메서드
+  public void changeTeam(Team team) {
+    this.team = team;
+    team.getMembers().add(this);
+  }
+}
+```
+
+- __방식 2__
+
+```java
+@Entity
+public class Team {
+  // 생략
+  
+  // 연관관계 편의 메서드
+  public void addMember(Member member) {
+      member.setTeam(this);
+      members.add(member);
+  }
+}
+```
+
+두 가지 방식 중 하나를 선택해서 사용하면 된다.
+
+> 접두사 set 은 추천하지 않는다. getter, setter 에 사용되는 규칙이기 때문에 change 등 다른 단어로 대체하여 사용하는 것이 좋다.
+
+#### [issue9-3] 양방향 연관관계 매핑 시 무한루프 주의
+
+- __toString() : StackOverflowError__
+  - Ex. Member 와 Team 에서 서로 toString() 을 구현하는 경우
+  - Member 의 toString 에서 team 을 호출하기 때문에, team.toString() 을 호출하게 된다.
+  - Team 에서도 members 를 호출하기 때문에 member 들의 toString() 을 계속 호출하게 된다.
+- __JSON 생성 라이브러리__
+  - Ex. Response 로 Member Entity 를 사용하는 경우
+  - Member Entity 를 JSON 으로 바꾸려는데, 안에 team 이 존재해서 Team 을 또 JSON 으로 바꾸려고하고, team 안에는 members 가 존재해서 members 를 JSON 으로 바꾸려고 시도하는 동작이 계속 발생
+  - 따라서, `컨트롤러에서는 엔티티를 반환하지 말아야 한다 !!` 
+    - 첫 번째 이유 : 무한루프발생
+    - 두 번째 이유 : 엔티티는 언제든 변경될 수 있기 때문에, 엔티티가 변경되면 응답, 요청등에 대한 API 스펙이 바뀌게 되는 셈이다.
+    - 이러한 이유로 `DTO` 를 만들어서 사용
