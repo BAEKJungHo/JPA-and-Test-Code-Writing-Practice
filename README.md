@@ -41,6 +41,7 @@
 - [#issue9-3] 연관관계 편의 메서드
 - [#issue9-4] 양방향 연관관계 매핑 시 무한루프 주의
 - [#issue9-5] 양방향 연관관계 실무 팁
+- [#issue9-6] 다양한 연관관계 매핑과 설정에 따른 트레이드 오프
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
