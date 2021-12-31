@@ -309,6 +309,7 @@ emf.close();
 - 외래키를 갖고 있는 엔티티가 연관관계의 주인이 된다.
 - Ex. Team : Member : 1 : N 관계에서는 Member 테이블에 FK 가 존재하므로, Membmer 엔티티가 연관관계의 주인이 된다.
 - 연관관계의 주인은 항상 `@ManyToOne` 쪽이 된다.
+  - 객체와 매핑할 테이블의 FK 를 지정해줘야 한다 : `@JoinColumn(name = "team_id")`
   - ```java
     @NoArgsConstructor
     @Getter @Setter
