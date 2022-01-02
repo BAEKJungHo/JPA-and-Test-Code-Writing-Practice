@@ -8,6 +8,7 @@
         <class>com.jtcwp.purejpa.domain.Item</class>
         <class>com.jtcwp.purejpa.domain.OrderItem</class>
         <class>com.jtcwp.purejpa.domain.Team</class>
+        <class>com.jtcwp.purejpa.domain.Locker</class>
         <properties>
             <!-- 필수 속성 -->
 

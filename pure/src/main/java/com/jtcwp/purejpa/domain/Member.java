@@ -24,6 +24,10 @@ public class Member {
     @ManyToOne
     private Team team;
 
+    @JoinColumn(name = "locker_id")
+    @OneToOne
+    private Locker locker;
+
     @Column(name = "name", length = 255)
     private String username;
 
