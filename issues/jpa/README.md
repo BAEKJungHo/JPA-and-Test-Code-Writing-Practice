@@ -569,7 +569,7 @@ public class Team {
     - 조회 쿼리가 복잡
     - 데이터 저장시 INSERT SQL 2번 호출
 - __단일 테이블 전략__
-  - ![IMAGES](./images/singletrategy.png)
+  - ![IMAGES](./images/singlestrategy.png)
   - `@Inheritance(strategy = InheritanceType.SINGLE_TABLE)`
   - `@DiscriminatorColumn` 명시 필수
   - 장점
@@ -585,6 +585,8 @@ public class Team {
   - 단점
     - 여러 자식 테이블을 함께 조회할 때 성능이 느림(UNION SQL 필요)
     - 자식 테이블을 통합해서 쿼리하기 어려움
+
+__실무에서 조인 테이블 전략과, 단일 테이블 전략 중 어떤 것을 사용할지 DBA 와 상의하여 결정__
 
 #### [#issue10-1] @DiscriminatorColumn
 
