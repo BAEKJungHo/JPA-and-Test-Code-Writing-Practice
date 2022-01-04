@@ -593,3 +593,25 @@ __실무에서 조인 테이블 전략과, 단일 테이블 전략 중 어떤 �
 - @DiscriminatorColumn 를 엔티티에 명시하면 테이블에 `DTYPE` 컬럼이 생성됨.
 - @DiscriminatorColumn 에 값을 지정할 수 있는데, 아무 값도 지정되어있지 않으면 엔티티 명으로 DTYPE 에 들어감.
   - @DiscriminatorColumn("ABC") 이런식으로 지정 가능.
+
+#### [#issue10-2] @MappedSuperclass
+
+- 테이블과 관계 없고, 단순히 엔티티가 공통으로 사용하는 매핑 정보를 모으는 역할
+- @MappedSuperclass 를 추상 클래스에 명시하고 서브 클래스에서 상속 받아서 사용할 수 있음.
+  - 즉, 엔티티의 공통 속성들을 BaseEntity 라는 추상 클래스에 모아두고 BaseEntity 는 @MappedSuperclass 적용
+- 조회, 검색 불가(em.find(BaseEntity) 불가)
+- 직접 생성해서 사용할 일이 없기 때문에 `추상 클래스`를 권장
+
+> @Entity 클래스는 엔티티나 @MappedSuperclass 로 지정한 클래스만 상속 가능
+
+```java
+@Getter @Setter
+@MappedSuperclass
+public abstract class BaseEntity {
+
+    private String createdBy;
+    private LocalDateTime createdDate;
+    private String lastModifiedBy;
+    private LocalDateTime lastModifiedDate;
+}
+```
