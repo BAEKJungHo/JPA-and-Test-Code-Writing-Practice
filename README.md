@@ -1,4 +1,4 @@
-# JTCWP(JPA and Test Code Writing Practice)
+# JPA and Test Code Writing Practice
 
 - __목표__
     - JPA, Junit5 Test Code 작성 연습 및 REST API 적용
