@@ -45,6 +45,9 @@
 - [#issue10] 상속관계 매핑
 - [#issue10-1] @DiscriminatorColumn
 - [#issue10-2] @MappedSuperclass
+- [#issue11] em.find vs em.getReference
+- [#issue12] 프록시 객체 초기화
+- [#issue13] 프록시 특징
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
