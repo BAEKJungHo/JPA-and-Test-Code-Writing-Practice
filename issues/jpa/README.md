@@ -702,3 +702,5 @@ findMember.getUsername();
   - 하이버네이트는 org.hibernate.LazyInitializationException 예외 발생
 
 > [Proxy Pattern](https://techvu.dev/112)
+>
+> [프록시 객체와 영속성 컨텍스트](https://techvu.dev/128)
