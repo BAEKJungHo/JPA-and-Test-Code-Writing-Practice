@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "team")
-public class Team {
+public class Team extends BaseEntity {
 
     @Column(name = "team_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

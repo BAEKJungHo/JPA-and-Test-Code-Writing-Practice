@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "orders", indexes = @Index(name = "idx_member_id", columnList = "member_id"))
-public class Order {
+public class Order extends BaseEntity {
 
     @Column(name = "order_id", length = 20)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "order_item")
-public class OrderItem {
+public class OrderItem extends BaseEntity {
 
     @Column(name = "order_item_id", length = 20)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

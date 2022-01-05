@@ -13,7 +13,7 @@ import java.util.List;
 @Getter @Setter
 @Entity
 @Table(name = "member")
-public class Member {
+public class Member extends BaseEntity {
 
     @Column(name = "member_id", length = 20)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +24,9 @@ public class Member {
     @ManyToOne
     private Team team;
 
-    @JoinColumn(name = "locker_id")
-    @OneToOne
-    private Locker locker;
+//    @JoinColumn(name = "locker_id")
+//    @OneToOne
+//    private Locker locker;
 
     @Column(name = "name", length = 255)
     private String username;

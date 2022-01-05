@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter @Setter
 @Entity
 @Table(name = "locker")
-public class Locker {
+public class Locker extends BaseEntity {
 
     @Column(name = "locker_id", length = 20)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +19,6 @@ public class Locker {
 
     private String name;
 
-    @OneToOne(mappedBy = "locker")
-    private Member member;
+//    @OneToOne(mappedBy = "locker")
+//    private Member member;
 }

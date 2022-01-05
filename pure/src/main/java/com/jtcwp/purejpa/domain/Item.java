@@ -9,9 +9,11 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
+@DiscriminatorColumn
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Entity
 @Table(name = "item")
-public class Item {
+public abstract class Item extends BaseEntity {
 
     @Column(name = "item_id", length = 20)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
