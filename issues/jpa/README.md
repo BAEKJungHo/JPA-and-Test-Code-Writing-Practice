@@ -701,6 +701,10 @@ findMember.getUsername();
 - 준영속 상태일 때, 프록시를 초기화 하면 문제 발생
   - 하이버네이트는 org.hibernate.LazyInitializationException 예외 발생
 
+- 프록시 강제 초기화
+  - Ex. member.getName(); 
+  - `Hibernate.initialize(findEntity)`
+
 > [Proxy Pattern](https://techvu.dev/112)
 >
 > [프록시 객체와 영속성 컨텍스트](https://techvu.dev/128)
