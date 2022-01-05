@@ -615,3 +615,60 @@ public abstract class BaseEntity {
     private LocalDateTime lastModifiedDate;
 }
 ```
+
+### [#issue11] em.find vs em.getReference
+
+- `em.find`
+  - ```java
+    // em.find() 시점에 조회 쿼리가 나간다.
+    // findMember : Member@9361
+    Member findMember = em.find(Member.class, member.getId());
+    System.out.println("username : " + findMember.getUsername());
+    System.out.println("id : " + findMember.getId());
+    ```
+  - 조회쿼리
+    - ```sql
+      select
+        member0_.member_id as member_i1_2_0_,
+        member0_.createdBy as createdb2_2_0_,
+        member0_.createdDate as createdd3_2_0_,
+        member0_.lastModifiedBy as lastmodi4_2_0_,
+        member0_.lastModifiedDate as lastmodi5_2_0_,
+        member0_.city as city6_2_0_,
+        member0_.street as street7_2_0_,
+        member0_.team_id as team_id10_2_0_,
+        member0_.name as name8_2_0_,
+        member0_.zipcode as zipcode9_2_0_,
+        team1_.team_id as team_id1_5_1_,
+        team1_.createdBy as createdb2_5_1_,
+        team1_.createdDate as createdd3_5_1_,
+        team1_.lastModifiedBy as lastmodi4_5_1_,
+        team1_.lastModifiedDate as lastmodi5_5_1_,
+        team1_.name as name6_5_1_ 
+      from
+          member member0_ 
+      left outer join
+          team team1_ 
+              on member0_.team_id=team1_.team_id 
+      where
+          member0_.member_id=?
+      ```
+- `em.getReference()`
+  - ```java
+    // em.getReference 시점에는 쿼리가 안나간다.
+    // findMember: Member$HibernateProxy$U7SsWYXV@9342
+    Member findMember = em.getReference(Member.class, member.getId());
+    // ID 는 위에서 이미 파라미터로 넘겨서 담아줬기 때문에 조회할때 쿼리가 나가지 않는다.
+    System.out.println("id : " + findMember.getId());
+    // ID 를 제외한 다른 속성을 조회할때 쿼리가 나간다.
+    System.out.println("username : " + findMember.getUsername());
+    ```
+   - em.getReference() : 데이터베이스 조회를 미루는 프록시 엔티티 조회
+
+### [#issue12] 프록시 객체 초기화
+
+```java
+Member findMember = em.getReference(Member.class, member.getId());
+findMember.getUsername();
+```
+
