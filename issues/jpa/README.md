@@ -672,3 +672,5 @@ Member findMember = em.getReference(Member.class, member.getId());
 findMember.getUsername();
 ```
 
+![IMAGES](./images/initializeproxyinstance.png)
+
