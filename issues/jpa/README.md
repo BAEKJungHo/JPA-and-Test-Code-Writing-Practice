@@ -667,10 +667,38 @@ public abstract class BaseEntity {
 
 ### [#issue12] 프록시 객체 초기화
 
+![IMAGES](./images/initializeproxyinstance.png)
+
 ```java
 Member findMember = em.getReference(Member.class, member.getId());
 findMember.getUsername();
 ```
 
-![IMAGES](./images/initializeproxyinstance.png)
+- 프록시 객체의 target 에 값이 없을때, 영속성 컨텍스트를 통해서 초기화를 요청한다.
+- 영속성 컨테스트는 DB 에서 값을 조회해와서 실제 Entity 를 생성하고, Proxy 객체의 target 변수에 실제 Entity 를 연결한다.
 
+### [#issue13] 프록시 특징
+
+- 프록시 객체는 처음 사용할 때 한 번만 초기화
+- 초기화 이후에는 프록시 객체를 통해서 실제 엔티티에 접근 가능
+- 프록시 객체는 원본 엔티티를 상속 받음, 따라서 타임 체크시 주의(instanceof 사용, == 비교 X )
+- 찾고자 하는 엔티티가 영속성 컨텍스트에 이미 있으면, em.getReference() 를 호출해도 실제 엔티티 반환
+  - 이미 1차 캐시에 있는데 굳이 프록시 객체를 만들 이유가 없음.
+  - `==` 비교시 true 를 위해 : `JPA 매커니즘 중 하나`
+    - 한 트랜잭션안에서 영속성 컨테스트에서 객체를 조회했는데 그 결과가 다르면 안되니까 같은 객체를 조회
+    - ```java
+      Member member = new Member();
+      member.setUsername("Member1");
+      em.persist(member);
+
+      em.flush(); // 영속성 컨텍스트의 변경 내용을 DB 에 동기화
+      em.clear(); // 영속성 컨텍스트를 비워줌으로써 준영속 상태가 된다.
+
+      Member findMember1 = em.find(Member.class, member.getId());
+      Member findMember2 = em.getReference(Member.class, member.getId());
+      System.out.println("result : " + findMember1 == findMember2);
+      ```
+- 준영속 상태일 때, 프록시를 초기화 하면 문제 발생
+  - 하이버네이트는 org.hibernate.LazyInitializationException 예외 발생
+
+> [Proxy Pattern](https://techvu.dev/112)
