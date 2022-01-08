@@ -708,3 +708,38 @@ findMember.getUsername();
 > [Proxy Pattern](https://techvu.dev/112)
 >
 > [프록시 객체와 영속성 컨텍스트](https://techvu.dev/128)
+
+### [#issue14] LazyLoading vs EagerLoading
+
+- __LazyLoading__
+  - 프록시 사용
+  - `@ManyToOne(fetch = FetchType.LAZY)`
+  - FetchType.LAZY 으로 설정하면 지연 로딩 발생
+  - Membmer 조회는 로딩 -> Team 객체의 속성에 직접 접근할 때 조회 쿼리 발생(지연로딩)
+
+```java
+생략...
+
+Member m = em.find(Member.class, member.getId());
+
+// Team 은 Proxy : class com.jtcwp.purejpa.domain.Team$HibernateProxy$N1Y9mJLt
+System.out.println(m.getTeam().getClass());
+
+// 이 시점에 쿼리가 나감
+System.out.println(m.getTeam().getName());
+
+생략...
+```
+
+- __EagerLoading__
+  - 프록시 사용 안함
+  - @ManyToOne(fetch = FetchType.EAGER)
+  - 회원과 팀을 한꺼번에 조회
+
+### [#issue14-1] 프록시와 즉시 로딩 주의
+
+- __실무에서는 가급적 지연 로딩(LazyLoading)만 사용__
+- 즉시 로딩을 사용하면 예상치 못한 SQL 이 발생할 수 있음
+- __즉시 로딩은 JPQL 에서 N + 1 문제를 일으킨다.__
+- @ManyToOne, @OneToOne 은 디폴트가 즉시 로딩이므로, 지연 로딩 설정을 따로 해줘야 한다.
+- @OneToMany, @ManyToMany 는 디폴트가 지연 로딩
