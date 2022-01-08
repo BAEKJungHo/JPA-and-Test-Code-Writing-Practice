@@ -48,6 +48,10 @@
 - [#issue11] em.find vs em.getReference
 - [#issue12] 프록시 객체 초기화
 - [#issue13] 프록시 특징
+- [#issue14] LazyLoading vs EagerLoading
+- [#issue14-1] 프록시와 즉시 로딩 주의
+- [#issue15] 영속성 전이 : CASCASDE
+- [#issue16] 고아 객체
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
