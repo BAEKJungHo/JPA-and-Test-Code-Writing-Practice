@@ -743,3 +743,63 @@ System.out.println(m.getTeam().getName());
 - __즉시 로딩은 JPQL 에서 N + 1 문제를 일으킨다.__
 - @ManyToOne, @OneToOne 은 디폴트가 즉시 로딩이므로, 지연 로딩 설정을 따로 해줘야 한다.
 - @OneToMany, @ManyToMany 는 디폴트가 지연 로딩
+
+### [#issue15] 영속성 전이 : CASCASDE
+
+- 특정 엔티티를 영속 상태로 만들 때 연관된 엔티티도 함께 영속 상태로 만들고 싶을 때 사용
+- Ex. 부모 엔티티를 저장할 때 자식 엔티티도 함께 저장
+- 엔티티를 영속화 할 때, 연관된 엔티티도 함께 영속화 하는 편리함을 제공할 뿐
+- ```java
+  @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+  private List<Child> childList = new ArrayList<>();
+  ```
+- 부모와 자식의 등록, 삭제 등 라이프 사이클이 거의 유사한 경우 사용 가능
+   - Ex. 게시글과 첨부파일
+- 단일 소유자일때 사용 가능
+  - 자식이 하나의 부모 엔티티에만 종속적일때 사용 가능
+
+- `ALL` : 모두 적용
+- `PERSIST` : 영속
+- `REMOVE` : 삭제
+- `MERGE` : 병합
+- `REFRESH` : REFRESH
+- `DETACH` : DETACH
+
+### [#issue16] 고아 객체
+
+- 고아 객체 제거 : 부모 엔티티와 연관 관계가 끊어진 자식 엔티티를 자동으로 삭제
+- orphanRemoval = true
+- ```java
+  @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Child> childList = new ArrayList<>();
+  ```
+
+```java
+Child child1 = new Child();
+Child child2 = new Child();
+
+Parent parent = new Parent();
+parent.addChild(child1);
+parent.addChild(child2);
+
+em.persist(parent);
+
+em.flush();
+em.close();
+
+Parent findParent = em.find(Parent.class, parent.getId());
+findParent.getChildList().remove(0); // 자식 엔티티를 컬렉션에서 제거
+```
+
+- 참조가 제거된 엔티티는 다른 곳에서 참조하지 않는 고아 객체로 보고 삭제하는 기능
+- 참조하는 곳이 하나일 때 사용해야 함!
+- __특정 엔티티가 개인 소유할 때 사용__
+- @OneToOne, @OneToMany 만 가능
+- 부모를 제거하면 자식은 고아가 되기 때문에, CascadeType.ALL 기능을 활성화 중이라면 `orphanRemoval = true` 를 지워도, 부모가 제거 될 때 자식도 제거된다.
+
+
+- __CascadeType.ALL + orphanRemoval = true__
+  - 스스로 생명주기를 관리하는 엔티티는 em.persist() 로 영속화, em.remove() 로 제거
+  - `두 옵션을 모두 활성화 하면 부모 엔티티를 통해서 자식의 생명 주기를 관리할 수 있음`
+    - Parent 는 JPA 가 생명 주기를 관리하고, Child 의 생명 주기는 Parent 가 관리
+  - DDD 의 Aggregate Root 개념을 구현할 때 유용
