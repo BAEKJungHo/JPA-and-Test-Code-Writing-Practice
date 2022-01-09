@@ -4,6 +4,7 @@ package com.jtcwp.purejpa.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.bytebuddy.asm.Advice;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -31,14 +32,19 @@ public class Member extends BaseEntity {
     @Column(name = "name", length = 255)
     private String username;
 
-    @Column(name = "city", length = 500)
-    private String city;
+    @Embedded
+    private Period period;
 
-    @Column(name = "street", length = 500)
-    private String street;
+    @Embedded
+    private Address homeAddress;
 
-    @Column(name = "zipcode", length = 10)
-    private String zipcode;
+    @AttributeOverrides({
+            @AttributeOverride(name = "city", column = @Column(name = "WORK_CITY")),
+            @AttributeOverride(name = "street", column = @Column(name = "WORK_STREET")),
+            @AttributeOverride(name = "zipcode", column = @Column(name = "WORK_ZIPCODE"))
+    })
+    @Embedded
+    private Address workAddress;
 
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
