@@ -797,9 +797,93 @@ findParent.getChildList().remove(0); // 자식 엔티티를 컬렉션에서 제�
 - @OneToOne, @OneToMany 만 가능
 - 부모를 제거하면 자식은 고아가 되기 때문에, CascadeType.ALL 기능을 활성화 중이라면 `orphanRemoval = true` 를 지워도, 부모가 제거 될 때 자식도 제거된다.
 
-
 - __CascadeType.ALL + orphanRemoval = true__
   - 스스로 생명주기를 관리하는 엔티티는 em.persist() 로 영속화, em.remove() 로 제거
   - `두 옵션을 모두 활성화 하면 부모 엔티티를 통해서 자식의 생명 주기를 관리할 수 있음`
     - Parent 는 JPA 가 생명 주기를 관리하고, Child 의 생명 주기는 Parent 가 관리
   - DDD 의 Aggregate Root 개념을 구현할 때 유용
+
+### [#issue17] 값 타입
+
+- __엔티티 타입__
+  - @Entity 로 정의하는 객체
+  - 데이터가 변해도 식별자로 추적 가능
+- __값 타입__
+  - int, Integer, String 처럼 단순히 값으로 사용하는 자바 기본 타입이나 객체
+  - 식별자가 없으므로 데이터 변경 시 추적 불가능
+  - 값 타입은 단순하고 안전하게 다룰 수 있어야 한다.
+
+#### [#issue17-1] 임베디드 타입
+
+- Ex. 주소를 표현하기 위해서 주소의 속성들(city, street, zipcode)을 주소라는 객체를 만들어서 관리
+- 장점
+  - 재사용성
+  - 높은 응집도
+  - Address.isSeoul() 처럼 의미 있는 메서드를 만들 수 있음
+  - 임베디드 타입을 포함한 모든 값 타입의 생명주기는, 해당 값 타입을 소유한 엔티티에 의해 관리됨
+
+```java
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Embeddable
+public class Address {
+
+    private String city;
+    private String street;
+    private String zipcode;
+    
+    public boolean isSeoul() {
+      // 생략
+    }
+}
+```
+
+- `@AttributeOverride`
+  - 한 엔티티 안에서 같은 값 타입을 사용하는 경우
+  - Ex. 주소를 2개 사용하는 경우
+  - @AttributeOverrides, @AttributeOverrides 를 사용하여 컬럼 명 속성을 재정의 할 수 있다.
+  - ```java
+    @Embedded
+    private Address homeAddress;
+
+    @AttributeOverrides({
+            @AttributeOverride(name = "city", column = @Column(name = "WORK_CITY")),
+            @AttributeOverride(name = "street", column = @Column(name = "WORK_STREET")),
+            @AttributeOverride(name = "zipcode", column = @Column(name = "WORK_ZIPCODE"))
+    })
+    @Embedded
+    private Address workAddress;
+    ```
+
+- __값 타입과 불변 객체__
+  - 임베디드 타입 같은 값 타입을 여러 엔티티에서 공유하면 위험함(Side effect 발생 가능)
+  - 따라서, 안전하게 사용하기 위해 `값을 복사`해서 사용
+    - ```java
+      Address address = new Address("Seoul", "Sillm", "32000");
+      Member member = new Member();
+      member.setUsername("member1");
+      member.setHomeAddress(address);
+      em.persist(member);
+      
+      Address copyAddress = new Address(address.getCity(), address.getStreet(), address.getZipcode());
+      Member member2 = new Member();
+      member2.setUsername("member2");
+      member2.setHomeAddress(copyAddress);
+      em.persist(member2);
+      
+      // 값 타입 변경
+      member.getHomeAddress().setCity("NewYork");
+      ```
+  - 값을 복사하는 방식을 사용하면 공유 참조로 인한 Side effect 를 피할 순 있으나, 임베디드 타입이 경우는 자바의 기본 타입이 아닌 객체 타입이다.
+    - 객체 타입은 참조 값을 직접 대입하는 것을 막을 수 있는 방법이 없기 때문에, 객체의 공유 참조는 피할 수 없다.
+    - 위 코드를 예로 들면 member2.setHomeAddress(copyAddress); 여기에 address 를 넣더라도 문제가 되지 않는다.
+  - 따라서, 객체 타입을 수정할 수 없도록 `불변 객체(immutable object)` 로 설계해야 한다.
+    - 불변 객체(immutable object) : 생성 이후 절대 값을 변경할 수 없는 객체
+    - 생성자로만 값을 설정하고 setter 를 만들지 않는다. (혹은 setter 를 private 으로 설정)
+    - 값을 변경하고 싶은 경우에는 아래 처럼 새로 만들어야 한다.
+      - ```java
+        // 생성자를 이용한 코드가 길이가 길어지면 내부적으로 copy 메서드를 만들어서 활용할 수도 있다.
+        Address newAddress = new Address(address.getCity(), address.getStreet(), address.getZipcode());
+        member.setAddress(newAddress); // 값 객체를 통으로 변경한다.
+        ```
