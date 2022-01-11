@@ -1,6 +1,7 @@
 package com.jtcwp.purejpa.domain;
 
 
+import com.sun.nio.sctp.PeerAddressChangeNotification;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,7 +9,9 @@ import net.bytebuddy.asm.Advice;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter @Setter
@@ -37,6 +40,20 @@ public class Member extends BaseEntity {
 
     @Embedded
     private Address homeAddress;
+
+    // 테이블명 지정 및 MEMBER_ID 로 조인하겠다라는 의미. 즉, MEMBER_ID 를 FK 로 잡게된다.
+    @CollectionTable(name = "FAVORITE_FOOD", joinColumns = @JoinColumn(name = "MEMBER_ID"))
+    @ElementCollection
+    @Column(name = "FOOD_NAME") // 타입이 String 이기 때문에 예외적으로 허용
+    private Set<String> favoriteFoods = new HashSet<>();
+
+//    @CollectionTable(name = "ADDRESS", joinColumns = @JoinColumn(name = "MEMBER_ID"))
+//    @ElementCollection
+//    private List<Address> addressHistory = new ArrayList<>();
+
+    @JoinColumn(name = "member_id")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AddressEntity> addressHistory = new ArrayList<>();
 
     @AttributeOverrides({
             @AttributeOverride(name = "city", column = @Column(name = "WORK_CITY")),
