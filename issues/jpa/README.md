@@ -887,3 +887,68 @@ public class Address {
         Address newAddress = new Address(address.getCity(), address.getStreet(), address.getZipcode());
         member.setAddress(newAddress); // 값 객체를 통으로 변경한다.
         ```
+#### [#issue17-2] 값 타입 비교
+
+- __동일성(identity) 비교__
+  - 인스턴스의 참조 값을 비교, `==` 사용
+- __동등성(equivalence) 비교__
+  - 인스턴스의 값을 비교, `equals()` 사용
+  - 값 타입 비교는 equals 사용
+    - equals 내부는 == 비교를 사용하기 때문에 값 타입 내부에 equals 와 hashCode 를 오버라이딩 하여 사용해야 한다.
+    - ```java
+      @Override
+      public boolean equals(Object o) {
+          if (this == o) return true;
+          if (o == null || getClass() != o.getClass()) return false;
+          Address address = (Address) o;
+          return Objects.equals(city, address.city) && Objects.equals(street, address.street) && Objects.equals(zipcode, address.zipcode);
+      }
+
+      @Override
+      public int hashCode() {
+          return Objects.hash(city, street, zipcode);
+      }
+      ```
+
+#### [#issue17-2] 값 타입을 컬렉션에 넣어서 사용하기
+
+예를 들어, Member 엔티티에서 Address 값 타입을 컬렉션을 사용하려면, Address 자체를 테이블로 따로 만들어서 관리해야 한다.
+
+값 타입은 모든 속성이 동일해야 같은 값이라고 판단하기 때문에 테이블로 만들면 아래와 같은 형태가 된다. 
+
+> 값 타입에 인조키 식별자를 도입하게되면 엔티티가 되어버린다.
+
+```
+-----Address-----
+MEMBER_ID(PK, FK)
+CITY(PK)
+STREET(PK)
+ZIPCODE(PK)
+-----------------
+```
+
+- __값 타입 컬렉션__
+  - `@ElementCollection, @CollectionTable` 사용
+  - 데이터베이스는 컬렉션을 같은 테이블에 저장할 수 없다. 따라서, 별도의 테이블이 필요하다.
+  - ```java
+    @Embedded
+    private Address homeAddress;
+
+    // 테이블명 지정 및 MEMBER_ID 로 조인하겠다라는 의미. 즉, MEMBER_ID 를 FK 로 잡게 된다.
+    @CollectionTable(name = "FAVORITE_FOOD", joinColumns = @JoinColumn(name = "MEMBER_ID"))
+    @ElementCollection
+    @Column(name = "FOOD_NAME") // 타입이 String 이기 때문에 예외적으로 허용
+    private Set<String> favoriteFoods = new HashSet<>();
+
+    @CollectionTable(name = "ADDRESS", joinColumns = @JoinColumn(name = "MEMBER_ID"))
+    @ElementCollection
+    private List<Address> addressHistory = new ArrayList<>();
+
+    @AttributeOverrides({
+            @AttributeOverride(name = "city", column = @Column(name = "WORK_CITY")),
+            @AttributeOverride(name = "street", column = @Column(name = "WORK_STREET")),
+            @AttributeOverride(name = "zipcode", column = @Column(name = "WORK_ZIPCODE"))
+    })
+    @Embedded
+    private Address workAddress;
+    ```
