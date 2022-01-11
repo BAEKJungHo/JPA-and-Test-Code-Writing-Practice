@@ -952,3 +952,6 @@ ZIPCODE(PK)
     @Embedded
     private Address workAddress;
     ```
+  - ![IMAGES](./images/votype1.png)
+  - ![IMAGES](./images/votypeindex.png)
+  - ![IMAGES](./images/votype2.png)
