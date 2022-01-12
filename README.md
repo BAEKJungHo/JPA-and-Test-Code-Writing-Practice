@@ -57,6 +57,8 @@
 - [#issue17-2] 값 타입 비교
 - [#issue18] 값 타입을 컬렉션에 넣어서 사용하기
 - [#issue19] 값 타입을 엔티티로 승급
+- [#issue20] JPQL
+- [#issue21] QueryDSL
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
