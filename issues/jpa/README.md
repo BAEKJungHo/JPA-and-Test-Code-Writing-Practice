@@ -1068,3 +1068,22 @@ public class Member {
 
   // 생략
 }
+```
+
+### [#issue20] JPQL
+
+- 검색을 할 때, 테이블이 아닌 `엔티티를 대상으로 검색`
+- JPA 는 SQL 을 추상화한 JPQL 이라는 객체 지향 쿼리 언어 제공
+- JPQL : 엔티티 객체를 대상으로 쿼리
+- SQL : 데이터베이스 테이블을 대상으로 쿼리
+
+### [#issue21] QueryDSL
+
+- 문자가 아닌 자바 코드로 JPQL 작성 가능
+- JPQL 빌더 역할
+- 컴파일 시점에 문법 오류를 찾을 수 있음
+- `동적 쿼리 작성이 편리함`
+- 단순하고 쉬움
+- 실무 사용 권장
+
+> [QueryDSL Doc](http://querydsl.com/static/querydsl/4.0.1/reference/ko-KR/html_single/)
