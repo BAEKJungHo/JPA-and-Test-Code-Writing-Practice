@@ -59,6 +59,7 @@
 - [#issue19] 값 타입을 엔티티로 승급
 - [#issue20] JPQL
 - [#issue21] QueryDSL
+- [#issue22] TypeQuery 와 Query
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
