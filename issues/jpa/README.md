@@ -1074,7 +1074,7 @@ public class Member {
 
 - 검색을 할 때, 테이블이 아닌 `엔티티를 대상으로 검색`
 - JPA 는 SQL 을 추상화한 JPQL 이라는 객체 지향 쿼리 언어 제공
-- JPQL : 엔티티 객체를 대상으로 쿼리
+- JPQL(Java Persistence Query Languages) : 엔티티 객체를 대상으로 쿼리
 - SQL : 데이터베이스 테이블을 대상으로 쿼리
 
 ### [#issue21] QueryDSL
@@ -1087,3 +1087,17 @@ public class Member {
 - 실무 사용 권장
 
 > [QueryDSL Doc](http://querydsl.com/static/querydsl/4.0.1/reference/ko-KR/html_single/)
+
+### [#issue22] TypeQuery 와 Query
+
+- __TypeQuery__
+  - 반환 타입이 명확할 때 사용
+- __Query__
+  - 반환 타입이 명확하지 않을 때 사용
+- __query.getResultList()__
+  - 결과가 하나 이상일 때, 리스트 반환
+  - 결과가 없으면 빈 리스트 반환
+- __query.getSingleResult()__
+  - 결과가 정확히 하나, 단일 객체 반환
+  - 결과가 없으면 : `javax.persistence.NoResultException`
+  - 결과가 둘 이상이면 : `javax.persistence.NoUniqueResultException`
