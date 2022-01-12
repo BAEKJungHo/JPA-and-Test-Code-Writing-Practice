@@ -41,8 +41,8 @@ class VoCollectionTest {
 //            member.getAddressHistory().add(new Address("old1", "street", "12341"));
 //            member.getAddressHistory().add(new Address("old2", "street", "12342"));
 
-            member.getAddressHistory().add(new AddressEntity("old1", "street", "12341"));
-            member.getAddressHistory().add(new AddressEntity("old2", "street", "12342"));
+//            member.getAddressHistory().add(new AddressEntity("old1", "street", "12341"));
+//            member.getAddressHistory().add(new AddressEntity("old2", "street", "12342"));
 
             em.persist(member);
 
@@ -68,11 +68,11 @@ class VoCollectionTest {
             // old1 -> newCity1
             // delete from 주소컬렉션 where member_id = ?
             // 즉, member_id 기준으로 전체를 삭제한다.
-            findMember.getAddressHistory().remove(new Address("old1", "street", "12341"));
+//            findMember.getAddressHistory().remove(new Address("old1", "street", "12341"));
 
             // 여기서 newCity1 을 하나만 등록했지만, 위에서 old2 가 아직 컬렉션에 존재하기 때문에
             // insert 쿼리가 두 번 나간다.
-            findMember.getAddressHistory().add(new Address("newCity1", "street", "12341"));
+//            findMember.getAddressHistory().add(new Address("newCity1", "street", "12341"));
 
             tx.commit();
         } catch (Exception e) {

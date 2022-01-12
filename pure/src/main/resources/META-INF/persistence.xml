@@ -11,6 +11,10 @@
         <class>com.jtcwp.purejpa.domain.Locker</class>
         <class>com.jtcwp.purejpa.domain.Parent</class>
         <class>com.jtcwp.purejpa.domain.Child</class>
+
+        <!-- JPQL 용 도메인 -->
+        <class>com.jtcwp.purejpa.domainforjpql.MemberJpql</class>
+        <class>com.jtcwp.purejpa.domainforjpql.TeamJpql</class>
         <properties>
             <!-- 필수 속성 -->
 

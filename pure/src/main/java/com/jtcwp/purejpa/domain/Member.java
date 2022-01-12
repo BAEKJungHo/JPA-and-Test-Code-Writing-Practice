@@ -51,9 +51,9 @@ public class Member extends BaseEntity {
 //    @ElementCollection
 //    private List<Address> addressHistory = new ArrayList<>();
 
-    @JoinColumn(name = "member_id")
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AddressEntity> addressHistory = new ArrayList<>();
+//    @JoinColumn(name = "member_id")
+//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<AddressEntity> addressHistory = new ArrayList<>();
 
     @AttributeOverrides({
             @AttributeOverride(name = "city", column = @Column(name = "WORK_CITY")),
