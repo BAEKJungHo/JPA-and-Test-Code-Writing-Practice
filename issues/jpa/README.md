@@ -1101,3 +1101,40 @@ public class Member {
   - 결과가 정확히 하나, 단일 객체 반환
   - 결과가 없으면 : `javax.persistence.NoResultException`
   - 결과가 둘 이상이면 : `javax.persistence.NoUniqueResultException`
+
+### [#issue23] 프로젝션
+
+- __프로젝션__
+  - SELECT 절에 조회할 대상을 지정하는 것
+- __대상__
+  - 엔티티, 임베디드 타입, 스칼라 타입(숫자, 문자 등 기본 데이터 타입)
+  - `select m from Member m` : 엔티티 프로젝션
+  - `select m.team from Member m` : 엔티티 프로젝션
+  - `select m.address from Member m` : 임베디드 타입 프로젝션
+  - `select m.username, m.age from Member m` : 스칼라 타입 프로젝션
+  - distinct 넣으면 중복 제거 가능
+
+#### [#issue23-1] 조회 결과를 DTO 로 받기
+
+엔티티가 아닌 클래스로 조회 결과를 받기 위해서는 아래와 같은 형식으로 사용해야 한다.
+
+- `패키지명.클래스명(조회 속성1, 조회 속성2, ...)`
+- 따라서, DTO 에 생성자가 필요하다.
+
+```java
+MemberJpql member = new MemberJpql();
+member.setUsername("member1");
+member.setAge(10);
+em.persist(member);
+
+em.flush();
+em.clear();
+
+List<MemberDTO> result = em.createQuery(
+        "select new com.jtcwp.purejpa.domainforjpql.MemberDTO(m.username, m.age) from MemberJpql m", MemberDTO.class
+        ).getResultList();
+
+MemberDTO memberDTO = result.get(0);
+System.out.println(memberDTO.getUsername());
+System.out.println(memberDTO.getAge());
+```
