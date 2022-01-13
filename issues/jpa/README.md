@@ -1155,3 +1155,12 @@ System.out.println(memberDTO.getAge());
 order by
     memberjpql0_.age desc limit ?, ?
 ```
+
+### [#issue25] 조인
+
+- __내부 조인__
+  - `SELECT m SELECT Member m [INNER] JOIN m.team t`
+- __외부 조인__
+  - `SELECT m SELECT Member m LEFT [OUTER] JOIN m.team t`
+- __세타 조인__
+  - `SELECT count(m) FROM Member m, Team t where m.username = t.name`
