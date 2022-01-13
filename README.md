@@ -60,6 +60,10 @@
 - [#issue20] JPQL
 - [#issue21] QueryDSL
 - [#issue22] TypeQuery 와 Query
+- [#issue23] 프로젝션
+- [#issue23-1] 조회 결과를 DTO 로 받기
+- [#issue24] 페이징
+- [#issue25] 조인
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
