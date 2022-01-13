@@ -1138,3 +1138,20 @@ MemberDTO memberDTO = result.get(0);
 System.out.println(memberDTO.getUsername());
 System.out.println(memberDTO.getAge());
 ```
+
+### [#issue24] 페이징
+
+- JPA 는 페이징을 다음 두 API 로 추상화
+  - `setFirstResult(int startPosition)` : 조회 시작 위치(0부터 시작)
+  - `setMaxResults(int maxResult)` : 조회할 데이터 수
+
+```java
+ List<MemberJpql> result = em.createQuery("select m from MemberJpql m order by m.age desc", MemberJpql.class)
+                 .setFirstResult(1)
+                 .setMaxResults(10)
+                 .getResultList();
+```
+```
+order by
+    memberjpql0_.age desc limit ?, ?
+```
