@@ -1191,3 +1191,76 @@ select m from Member m where m.team = ANY (select t from Team t)
   - 하이버네이트는 SELECT 절에서 서브 쿼리 사용 가능
   - FROM 절의 서브쿼리는 현재 JPQL 에서 불가능
     - 조인으로 풀 수 있으면 풀어서 해결
+
+### [#issue27] JPQL 타입 표현
+
+- 문자 : 'HELLO', 'She''s'
+- 숫자 : 10L(Long), 10D(Double), 10F(Float)
+- Boolean : TRUE, FALSE
+- Enum : 패지지명.enum명
+- 엔티티타입 : TYPE(m) = Member(상속 관계에서 사용)
+
+### [#issue28] 조건식
+
+- __case__
+
+```sql
+-- 기본 case 식
+select
+  case when m.age <= 10 then '학생요금'
+       when m.age >= 60 then '경로요금'
+       else '일반요금'
+  end
+from Member m
+
+-- 단순 case 식
+select
+  case t.name
+       when '팀A' then '인센티브200%'
+       when '팀B' then '인센티브150%'
+       else '인센티브 180%'
+  end
+from Team t
+```
+
+- __coalesce : 하나씩 조회해서 null 이 아니면 반환__
+  - select coalesce(m.username, '이름 없는 회원') from Member m
+    - username 이 없으면 이름 없는 회원이라고 나온다.
+- __NULLIF : 두 값이 같으면 null 반환, 다르면 첫 번째 값 반환__
+  - select NULLIF(m.username, '관리자') from Member m
+
+### [#issue29] JPQL 기본 함수
+
+- CONCAT
+- SUBSTRING
+- TRIM
+- LOWER, UPPER
+- LENGTH
+- LOCATE
+- ABS, SORT, MOD
+- SIZE, INDEX(JPA 용도)
+
+그 외에는 DB 방언마다 지정되어있는 함수를 쓰거나, 사용자 정의 함수를 만들어서 사용해야 한다.
+
+- __사용자 정의 함수__
+
+```java
+public class MyDialect extends H2Dialect {
+
+    public MyDialect() {
+        registerFunction("group_conat", new StandardSQLFunction("group_concat", StandardBasicTypes.STRING));
+    }
+}
+```
+
+- __persistence.xml__
+
+```xml
+<property name="hibernate.dialect" value="com.jtcwp.purejpa.dialect.MyDialect"/>
+```
+
+- __사용__
+
+```java
+String query = "select group_concat(m.username) From Member m";
+```
