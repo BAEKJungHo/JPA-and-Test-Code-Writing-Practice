@@ -29,6 +29,9 @@
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/jpastudy"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL57Dialect"/>
 
+            <!-- 사용자 정의 Dialect -->
+<!--            <property name="hibernate.dialect" value="com.jtcwp.purejpa.dialect.MyDialect"/>-->
+
             <!-- 옵션 -->
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
