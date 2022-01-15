@@ -64,6 +64,10 @@
 - [#issue23-1] 조회 결과를 DTO 로 받기
 - [#issue24] 페이징
 - [#issue25] 조인
+- [#issue26] 서브쿼리
+- [#issue27] JPQL 타입 표현
+- [#issue28] 조건식
+- [#issue29] JPQL 기본 함수
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
