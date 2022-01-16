@@ -1306,4 +1306,30 @@ __실무에서는 묵시적 조인이 발생하지 않도록 명시적 조인을
 
 > 명시적 조인 : join 키워드를 직접 사용
 
+### [#issue31] Fetch Join
 
+- __페치 조인(fetch join)__
+  - SQL 조인 종류 X
+  - JPQL 에서 `성능 최적화`를 위해 제공하는 기능
+  - __객체 그래프를 SQL 한번에 조회하는 개념__
+  - 연관된 엔티티나 컬렉션을 `SQL 한 번에 함께 조회`하는 기능
+  - JPQL 은 결과를 반환할 때 연관 관계를 고려하지 않는다. 단지 SELECT 절에 지정한 엔티티를 조회한다.
+    - __페치 조인을 사용할 때만 연관된 엔티티를 함께 조회한다. (즉시 로딩)__
+  - 명령어 : `join fetch`
+    - Ex. [LEFT [OUTER] | INNTER] JOIN FETCH 조인 경로
+- __회원을 조회하면서 연관된 팀도 함께 조회(SQL 한 번에)__
+  - JPQL
+    - `select m from Member m join fetch m.team`
+  - SQL
+    - `select M.*, T.* FROM MEMBER M INNSER JOIN TEAM T ON M.TEAM_ID = T.ID`
+- __컬렉션 페치 조인__
+  - JPQL
+    - `select t from Team t join fetch t.members where t.name = '팀A'`
+  - SQL
+    - `SELECT T.*, M.* FROM TEAM T INNER JOIN MEMBER M ON T.ID = M.TEAM_ID WHERE T.NAME = '팀A'`
+- __JPQL DISTINCT__
+  - 2가지 기능 제공
+    - 1. SQL 에 DISTINCT 추가
+    - 2. 애플리케이션에서 엔티티 중복 제거
+  - DISTINCT 가 추가로 애플리케이션에서 중복 제거 시도
+  - 같은 식별자를 가진 엔티티 제거
