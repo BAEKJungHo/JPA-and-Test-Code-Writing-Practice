@@ -1264,3 +1264,46 @@ public class MyDialect extends H2Dialect {
 ```java
 String query = "select group_concat(m.username) From Member m";
 ```
+
+### [#issue30] 경로 표현식
+
+- `.(점)`을 찍어 객체 그래프를 탐색하는 것
+  - ```java
+    select m.username -> 상태 필드
+    from Member m
+      join m.team t -> 단일 값 연관 필드
+      join m.orders o -> 컬렉션 값 연관 필드
+    where t.name = '팀A'
+    ```
+- __상태 필드__
+  - 단순히 값을 저장하기 위한 필드(Ex. m.username)
+- __연관 필드__
+  - 연관 관계를 위한 필드
+  - 단일 값 연관 필드
+    - @ManyToOne, @OneToOne, 대상이 엔티티
+  - 컬렉션 값 연관 필드
+    - @OneToMany, @ManyToMany, 대상이 컬렉션(Ex. m.orders)
+
+- __특징__
+  - `상태 필드` : 경로 탐색의 끝이기 때문에 더 이상 탐색 불가능
+  - `단일 값 연관 경로` : 묵시적 내부 조인(inner join) 발생, 더 탐색 가능
+    - ```java
+      // 해당 쿼리를 돌리면 묵시적 내부 조인이 발생
+      // inner join Team ~~
+      String query = "select m.team from MemberJpql m";
+      ```
+    - __실무에서는 가급적 묵시적 내부 조인이 발생하지 않도록 해야 한다. 쿼리 튜닝이 힘들다.__
+  - `컬렉션 값 연관 경로` : 묵시적 내부 조인 발생, 탐색 X
+    - FROM 절에서 명시적 조인을 통해 별칭을 얻으면 별칭을 통해 탐색 가능
+    - ```java
+      // 해당 쿼리를 돌리면 묵시적 내부 조인이 발생
+      // inner join Member ~~
+      // t.members 에서 더 이상 탐색 불가능
+      String query = "select t.members from TeamJpql t";
+      ```
+  
+__실무에서는 묵시적 조인이 발생하지 않도록 명시적 조인을 사용해야, 나중에 쿼리 튜닝 등이 쉬워진다.__
+
+> 명시적 조인 : join 키워드를 직접 사용
+
+
