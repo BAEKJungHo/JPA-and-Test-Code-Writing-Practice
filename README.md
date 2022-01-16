@@ -68,6 +68,9 @@
 - [#issue27] JPQL 타입 표현
 - [#issue28] 조건식
 - [#issue29] JPQL 기본 함수
+- [#issue30] 경로 표현식
+- [#issue31] Fetch Join
+- [#issue31-1] Fetch Join 한계
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
