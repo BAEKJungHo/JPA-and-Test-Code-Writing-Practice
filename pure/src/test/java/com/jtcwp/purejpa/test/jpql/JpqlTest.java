@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 
 @SpringBootTest
@@ -152,6 +153,133 @@ class JpqlTest {
             String query = "select m from MemberJpql m join m.team t";
             List<MemberJpql> result = em.createQuery(query, MemberJpql.class)
                     .getResultList();
+
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {
+            em.close();
+        }
+        emf.close();
+    }
+
+    @DisplayName("단일 값 연관 경로 테스트 : 묵시적 내부조인 발생")
+    @Test
+    void pathSearchTest1() throws Exception {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnitName);
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        try {
+            MemberJpql member1 = new MemberJpql();
+            member1.setUsername("member1");
+            em.persist(member1);
+
+            MemberJpql member2 = new MemberJpql();
+            member2.setUsername("member2");
+            em.persist(member2);
+
+            em.flush();
+            em.clear();
+
+            // 해당 쿼리를 돌리면 묵시적 내부 조인이 발생
+            // inner join Team ~~
+            String query = "select m.team from MemberJpql m";
+
+            List<MemberJpql> result = em.createQuery(query, MemberJpql.class)
+                    .getResultList();
+
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {
+            em.close();
+        }
+        emf.close();
+    }
+
+    @DisplayName("컬렉션 값 연관 경로 테스트 : 묵시적 내부조인 발생")
+    @Test
+    void pathSearchTest2() throws Exception {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnitName);
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        try {
+            MemberJpql member1 = new MemberJpql();
+            member1.setUsername("member1");
+            em.persist(member1);
+
+            MemberJpql member2 = new MemberJpql();
+            member2.setUsername("member2");
+            em.persist(member2);
+
+            em.flush();
+            em.clear();
+
+            // 해당 쿼리를 돌리면 묵시적 내부 조인이 발생
+            // inner join Member ~~
+            // t.members 에서 더 이상 탐색 불가능
+            String query = "select t.members from TeamJpql t";
+
+            Collection result = em.createQuery(query, Collection.class)
+                            .getResultList();
+
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {
+            em.close();
+        }
+        emf.close();
+    }
+
+    @DisplayName("페치 조인 테스트")
+    @Test
+    void fetchJoinTest() throws Exception {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnitName);
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        try {
+            TeamJpql teamA = new TeamJpql();
+            teamA.setName("팀A");
+            em.persist(teamA);
+
+            TeamJpql teamB = new TeamJpql();
+            teamB.setName("팀B");
+            em.persist(teamB);
+
+            TeamJpql teamC = new TeamJpql();
+            teamC.setName("팀C");
+            em.persist(teamC);
+
+            MemberJpql member1 = new MemberJpql();
+            member1.setUsername("회원1");
+            member1.setTeam(teamA);
+            em.persist(member1);
+
+            MemberJpql member2 = new MemberJpql();
+            member2.setUsername("회원2");
+            member2.setTeam(teamB);
+            em.persist(member2);
+
+            MemberJpql member3 = new MemberJpql();
+            member3.setUsername("회원3");
+            member3.setTeam(teamC);
+            em.persist(member3);
+
+            em.flush();
+            em.clear();
+
+            String query = "select m from Member m join fetch m.team";
+
+            List<MemberJpql> result = em.createQuery(query, MemberJpql.class)
+                    .getResultList();
+
+            for (MemberJpql memberJpql : result) {
+                System.out.println(memberJpql.getUsername() + " --" + memberJpql.getTeam().getName());
+            }
 
             tx.commit();
         } catch (Exception e) {
