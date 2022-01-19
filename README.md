@@ -71,6 +71,8 @@
 - [#issue30] 경로 표현식
 - [#issue31] Fetch Join
 - [#issue31-1] Fetch Join 한계
+- [#issue32] Named Query
+- [#issue33] 벌크 연산
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
