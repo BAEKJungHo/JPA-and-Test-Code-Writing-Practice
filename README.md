@@ -73,6 +73,7 @@
 - [#issue31-1] Fetch Join 한계
 - [#issue32] Named Query
 - [#issue33] 벌크 연산
+- [#issue34] Optional
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
