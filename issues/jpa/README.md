@@ -1360,3 +1360,13 @@ __실무에서는 묵시적 조인이 발생하지 않도록 명시적 조인을
 - 벌크 연산은 영속성 컨텍스트를 무시하고 데이터베이스에 직접 쿼리
   - 벌크 연산을 먼저 실행
   - 벌크 연산 수행 후 영속성 컨텍스트 초기화
+
+### [#issue34] Optional
+
+- Spring Data JPA 를 사용할 때, Repository 에서 Return 타입을 Optional 로 지원하고 있다.
+  - Ex. findById
+  - ```java
+    // Optional<Line> line = lineRepository.findById(id);
+    Line line = lineRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 노선 ID 는 존재하지 않습니다."));
+    ```
