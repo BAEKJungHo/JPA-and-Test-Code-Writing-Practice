@@ -1370,3 +1370,151 @@ __실무에서는 묵시적 조인이 발생하지 않도록 명시적 조인을
     Line line = lineRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("해당 노선 ID 는 존재하지 않습니다."));
     ```
+
+### [#issue35] 일급 컬렉션
+
+- __일급 컬렉션 사용 예__
+
+```java
+@Entity
+public class Line extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private String color;
+    @Embedded
+    private Sections sections = new Sections();
+
+    protected Line() {
+    }
+
+    public Line(String name, String color) {
+        this.name = name;
+        this.color = color;
+    }
+
+    public static Line of(String name, String color, Station upStation, Station downStation, int distance) {
+        Line result = new Line(name, color);
+        result.sections.addFirstSection(Section.of(result, upStation, downStation, distance));
+
+        return result;
+    }
+
+    public void updateInfo(String name, String color) {
+        this.name = name;
+        this.color = color;
+    }
+
+    public void addSection(Station upStation, Station downStation, int distance) {
+        Section section = Section.of(this, upStation, downStation, distance);
+        sections.addSection(section);
+    }
+
+    public void deleteStation(Station deleteStation) {
+        sections.deleteStation(deleteStation);
+    }
+
+    public List<Station> getAllStations() {
+        return sections.getAllStations();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getColor() {
+        return color;
+    }
+}
+
+// 일급 컬렉션
+@Embeddable
+public class Sections {
+
+    private static final String SECTION_FIRST_ADD_ERROR_MESSAGE = "첫 구간 추가시에만 가능";
+    private static final int MINIMUM_SIZE_SECTION = 1;
+
+    @OneToMany(mappedBy = "line", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    private List<Section> sections = new ArrayList<>();
+
+    protected Sections() {
+    }
+
+    public void addFirstSection(Section section) {
+        if (!sections.isEmpty()) {
+            throw new ApplicationException(SECTION_FIRST_ADD_ERROR_MESSAGE);
+        }
+        sections.add(section);
+    }
+
+    public void addSection(Section section) {
+        validateDownStation(section.getUpStation());
+        validateAlreadyRegisteredStation(section.getDownStation());
+        sections.add(section);
+    }
+
+    public void deleteStation(Station deleteStation) {
+        validateDeleteLastDownStation(deleteStation);
+        validateMinimumSection();
+
+        int lastIndex = sections.size() - 1;
+        sections.remove(lastIndex);
+    }
+
+    public List<Section> getSections() {
+        return sections;
+    }
+
+    public List<Station> getAllStations() {
+        List<Station> stations = sections.stream()
+                .map(it -> it.getUpStation())
+                .collect(Collectors.toList());
+        stations.add(getLastDownStation());
+
+        return stations;
+    }
+
+    private void validateDownStation(Station upStation) {
+        if (!isAddableSection(upStation)) {
+            throw new DownStationNotMatchException(upStation.getName());
+        }
+    }
+
+    private void validateAlreadyRegisteredStation(Station dowStation) {
+        if (getAllStations().contains(dowStation)) {
+            throw new AlreadyRegisteredStationInLineException(dowStation.getName());
+        }
+    }
+
+    private void validateDeleteLastDownStation(Station deleteStation) {
+        Station lastDownStation = getLastDownStation();
+        if (!Objects.equals(lastDownStation, deleteStation)) {
+            throw new DeleteLastDownStationException(deleteStation.getName());
+        }
+    }
+
+    private void validateMinimumSection() {
+        if (sections.size() <= MINIMUM_SIZE_SECTION) {
+            throw new MinimumSectionException();
+        }
+    }
+
+    private boolean isAddableSection(Station upStation) {
+        Station lastDownStation = getLastDownStation();
+        return lastDownStation.equals(upStation);
+    }
+
+    private Station getLastDownStation() {
+        int lastIndex = sections.size() - 1;
+        Section section = sections.get(lastIndex);
+        return section.getDownStation();
+    }
+
+}
+```
