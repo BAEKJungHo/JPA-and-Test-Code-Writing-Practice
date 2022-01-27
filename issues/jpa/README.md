@@ -1518,3 +1518,22 @@ public class Sections {
 
 }
 ```
+
+### [#issue36] @Query
+
+```java
+public interface LineRepository extends JpaRepository<Line, Long> {
+
+    @Override
+    List<Line> findAll();
+
+    Optional<Line> findByName(String name);
+
+    @Query(value = "select l from Line l " +
+            "join fetch l.sections s " +
+            "join fetch s.upStation us " +
+            "join fetch s.downStation ds " +
+            "where l.id = :lineId")
+    Line findLineWithSectionsById(@Param("lineId") Long lineId);
+}
+```
