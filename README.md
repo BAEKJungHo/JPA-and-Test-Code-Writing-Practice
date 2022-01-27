@@ -75,6 +75,7 @@
 - [#issue33] 벌크 연산
 - [#issue34] Optional
 - [#issue35] 일급 컬렉션
+- [#issue36] @Query
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
