@@ -92,3 +92,4 @@
 - [인프런, 자바 ORM 표준 JPA 프로그래밍 - 기본편](https://www.inflearn.com/course/ORM-JPA-Basic/dashboard)
 - [Junit 5 Docs](https://junit.org/junit5/docs/current/user-guide/)
 - [Junit 5 Contents](https://github.com/BAEKJungHo/test-code-in-java/blob/main/doc/JUnit5.md)
+- [Spring에서의 Hibernate, JPA의 이용](https://netframework.tistory.com/entry/Spring%EC%97%90%EC%84%9C%EC%9D%98-Hibernate-JPA%EC%9D%98-%EC%9D%B4%EC%9A%A9)
