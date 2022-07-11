@@ -83,6 +83,14 @@
 - [#issue1-1] Given-When-Then Templates
 - [#issue2] @DisplayName
 
+## JPA Entity Lifecycle Events
+
+> 로깅할 때 유용
+>
+> https://www.baeldung.com/jpa-entity-lifecycle-events
+>
+> [Spring Data JDBC Lifecycle Events](https://docs.spring.io/spring-data/jdbc/docs/current/reference/html/)
+
 ### Referecnes
 
 - [JPA Contents](https://github.com/BAEKJungHo/JPA)
