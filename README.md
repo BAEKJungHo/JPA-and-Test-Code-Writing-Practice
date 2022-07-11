@@ -89,6 +89,8 @@
 >
 > https://www.baeldung.com/jpa-entity-lifecycle-events
 >
+> https://www.objectdb.com/java/jpa/persistence/event
+>
 > [Spring Data JDBC Lifecycle Events](https://docs.spring.io/spring-data/jdbc/docs/current/reference/html/)
 
 ### Referecnes
