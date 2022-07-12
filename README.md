@@ -88,6 +88,8 @@
 > 로깅할 때 유용
 >
 > https://www.baeldung.com/jpa-entity-lifecycle-events
+> 
+> https://www.czetsuyatech.com/2020/12/persistence-jpa-to-spring-events.html
 >
 > https://www.objectdb.com/java/jpa/persistence/event
 >
