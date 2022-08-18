@@ -1549,7 +1549,7 @@ public interface LineRepository extends JpaRepository<Line, Long> {
 }
 ```
 
-### [#issue36] @Column
+### [#issue37] @Column
 
 #### insertable
 
