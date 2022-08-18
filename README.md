@@ -76,6 +76,7 @@
 - [#issue34] Optional
 - [#issue35] 일급 컬렉션
 - [#issue36] @Query
+- [#issue37] @
 
 ### ✔️ [TEST issue 정리 내용](https://github.com/BAEKJungHo/jtcwp/tree/master/issues/test)
 
