@@ -1548,3 +1548,19 @@ public interface LineRepository extends JpaRepository<Line, Long> {
     Line findLineWithSectionsById(@Param("lineId") Long lineId);
 }
 ```
+
+### [#issue36] @Column
+
+#### insertable
+
+insertable 을 사용하는 경우
+
+> 데이터를 애플리케이션을 통해서 입력하지 않는 상황을 떠올려 보시면 됩니다^^
+>
+> 예를 들어서 새벽마다 DBA가 데이터를 퍼 올려서 입력해준 데이터라던가, 다른 서비스의 데이터를 읽기 전용으로만 사용해야 하는데, 그 데이터를 덤프를 떠서 입력하는 케이스들입니다^^
+
+#### updateable
+
+updatable는 update 시점에 막는 기능이다. 엔티티 영속성 컨텍스트에서 제외된다.
+
+
